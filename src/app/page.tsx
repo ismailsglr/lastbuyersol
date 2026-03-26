@@ -123,7 +123,7 @@ export default function Home() {
             <span className="text-[10px] sm:text-xs text-gray-400 font-mono tracking-[0.2em] uppercase font-medium">Verified Protocol</span>
           </div>
           
-          <h1 className="text-6xl sm:text-8xl md:text-[7.5rem] font-medium tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 leading-[1.1] pb-2 drop-shadow-sm">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 leading-[1.1] pb-2 drop-shadow-sm">
             LASTBUYER
           </h1>
           
@@ -142,11 +142,13 @@ export default function Home() {
             {isActive ? (
               <>
                 {/* Prize Pool Display */}
-                <div className="text-center space-y-3 w-full flex flex-col items-center">
-                  <span className="text-gray-500 text-[10px] uppercase tracking-[0.3em] font-medium">Ödül Havuzu</span>
-                  <div className="text-4xl sm:text-[3.5rem] font-light text-white tracking-tight flex items-baseline gap-2">
+                <div className="w-full flex justify-between items-center bg-white/[0.03] border border-white/[0.08] rounded-2xl px-6 py-5 shadow-inner">
+                  <span className="text-gray-400 text-xs uppercase tracking-[0.2em] font-medium flex items-center gap-2">
+                    <Trophy size={14} className="text-gray-500" /> Ödül Havuzu
+                  </span>
+                  <div className="text-3xl sm:text-4xl font-semibold text-white tracking-tight flex items-baseline gap-1.5 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
                     {prizePool.toFixed(2)}
-                    <span className="text-xl sm:text-2xl text-gray-500 font-medium">SOL</span>
+                    <span className="text-base sm:text-lg text-gray-500 font-medium pt-1">SOL</span>
                   </div>
                 </div>
 
@@ -198,10 +200,10 @@ export default function Home() {
 
             {/* Smart Contract CA */}
             <div className="w-full mt-2 pt-6 border-t border-white/[0.06] flex items-center justify-between group">
-              <span className="text-gray-600 text-[10px] sm:text-xs uppercase tracking-[0.25em] font-medium">CA</span>
-              <div className="flex items-center gap-3">
-                <code className="text-gray-400 text-xs font-mono tracking-widest">
-                  {contractAddress.substring(0,6)}...{contractAddress.substring(contractAddress.length-6)}
+              <span className="text-gray-600 text-[10px] sm:text-xs uppercase tracking-[0.25em] font-medium whitespace-nowrap hidden sm:block">CA</span>
+              <div className="flex items-center gap-3 w-full sm:w-auto overflow-hidden">
+                <code className="text-gray-400 text-[10px] sm:text-xs font-mono tracking-widest break-all truncate">
+                  {contractAddress}
                 </code>
                 <button 
                   onClick={handleCopy} 
@@ -243,10 +245,15 @@ export default function Home() {
 
         {/* Minimalist CTA */}
         {isActive && (
-          <button className="group mt-4 mb-20 px-8 py-3.5 rounded-full bg-white text-black font-medium text-sm sm:text-base flex items-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)]">
+          <a 
+            href={`https://pump.fun/coin/${contractAddress}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group mt-4 mb-20 px-8 py-3.5 rounded-full bg-white text-black font-medium text-sm sm:text-base flex items-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)] no-underline cursor-pointer"
+          >
             Pump.fun'da Satın Al
             <ExternalLink size={16} className="text-gray-500 group-hover:text-black transition-colors" />
-          </button>
+          </a>
         )}
 
       </main>
