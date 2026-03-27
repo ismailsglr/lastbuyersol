@@ -110,7 +110,7 @@ export default function Home() {
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <iframe
           src="https://www.youtube.com/embed/O5KoU0w5_ak?autoplay=1&mute=1&loop=1&playlist=O5KoU0w5_ak&controls=0&showinfo=0&rel=0&iv_load_policy=3&fs=0&disablekb=1"
-          className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 opacity-25 pointer-events-none mix-blend-screen"
+          className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 opacity-40 pointer-events-none mix-blend-screen"
           allow="autoplay; encrypted-media"
           tabIndex={-1}
           aria-hidden="true"
@@ -118,7 +118,7 @@ export default function Home() {
       </div>
       
       {/* DARK OVERLAY FOR READABILITY */}
-      <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none mix-blend-multiply" />
+      <div className="absolute inset-0 bg-black/20 z-0 pointer-events-none mix-blend-multiply" />
 
       {/* BACKGROUND (The part the user liked) - Subtle neon blobs */}
       <div className="absolute top-[-10%] z-0 left-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--color-neon-purple)] mix-blend-screen opacity-[0.07] blur-[120px] pointer-events-none" />
