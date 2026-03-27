@@ -106,12 +106,26 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center relative overflow-hidden font-sans text-gray-200 py-12 px-4 sm:px-8 bg-[#030303] selection:bg-white/20">
       
+      {/* YOUTUBE BACKGROUND */}
+      <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <iframe
+          src="https://www.youtube.com/embed/O5KoU0w5_ak?autoplay=1&mute=1&loop=1&playlist=O5KoU0w5_ak&controls=0&showinfo=0&rel=0&iv_load_policy=3&fs=0&disablekb=1"
+          className="absolute top-1/2 left-1/2 w-[100vw] h-[56.25vw] min-h-[100vh] min-w-[177.77vh] -translate-x-1/2 -translate-y-1/2 opacity-25 pointer-events-none mix-blend-screen"
+          allow="autoplay; encrypted-media"
+          tabIndex={-1}
+          aria-hidden="true"
+        />
+      </div>
+      
+      {/* DARK OVERLAY FOR READABILITY */}
+      <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none mix-blend-multiply" />
+
       {/* BACKGROUND (The part the user liked) - Subtle neon blobs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--color-neon-purple)] mix-blend-screen opacity-[0.07] blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--color-neon-cyan)] mix-blend-screen opacity-[0.07] blur-[120px] pointer-events-none" />
+      <div className="absolute top-[-10%] z-0 left-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--color-neon-purple)] mix-blend-screen opacity-[0.07] blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] z-0 right-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--color-neon-cyan)] mix-blend-screen opacity-[0.07] blur-[120px] pointer-events-none" />
       
       {/* Vercel-style micro-dot grid for depth */}
-      <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:32px_32px] z-0 pointer-events-none" />
 
       {/* Main Container */}
       <main className="flex-1 w-full max-w-[1000px] flex flex-col items-center z-10 gap-16 mt-8 sm:mt-16">
