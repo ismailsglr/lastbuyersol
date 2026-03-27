@@ -1,13 +1,49 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Copy, Check, ExternalLink, Crown, Coins, Timer, Trophy, ShieldCheck, Lock, CheckCircle2 } from "lucide-react";
+import { Copy, Check, ExternalLink, Crown, Coins, Timer, Trophy } from "lucide-react";
 import { createClient } from "@supabase/supabase-js";
+import { motion, AnimatePresence } from "framer-motion";
 
-// Initialize Supabase Client (Assume environment variables are provided)
+// Initialize Supabase Client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
+
+// Easing for premium feel
+const premiumEase = [0.16, 1, 0.3, 1];
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30, filter: "blur(8px)" },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    filter: "blur(0px)",
+    transition: { duration: 1, ease: premiumEase } 
+  }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 50, scale: 0.95, filter: "blur(10px)" },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    filter: "blur(0px)",
+    transition: { duration: 1.2, ease: premiumEase } 
+  }
+};
 
 export default function Home() {
   const [copied, setCopied] = useState(false);
@@ -95,16 +131,12 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [timerEndsAt]);
 
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
-  };
-
-  const isLowTime = timeLeft <= 30 && timeLeft > 0;
+  const minutesStr = Math.floor(timeLeft / 60).toString().padStart(2, "0");
+  const secondsStr = (timeLeft % 60).toString().padStart(2, "0");
+  const isLowTime = isActive && timeLeft <= 30 && timeLeft > 0;
 
   return (
-    <div className="min-h-screen flex flex-col items-center relative overflow-hidden font-sans text-gray-200 py-12 px-4 sm:px-8 bg-[#030303] selection:bg-white/20">
+    <div className="min-h-screen flex flex-col items-center relative overflow-hidden font-sans text-gray-200 pt-6 pb-12 px-4 sm:px-8 bg-[#030303] selection:bg-white/20">
       
       {/* YOUTUBE BACKGROUND */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -118,164 +150,244 @@ export default function Home() {
       </div>
       
       {/* DARK OVERLAY FOR READABILITY */}
-      <div className="absolute inset-0 bg-black/20 z-0 pointer-events-none mix-blend-multiply" />
+      <div className="absolute inset-0 bg-black/40 z-0 pointer-events-none mix-blend-multiply" />
 
-      {/* BACKGROUND (The part the user liked) - Subtle neon blobs */}
-      <div className="absolute top-[-10%] z-0 left-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--color-neon-purple)] mix-blend-screen opacity-[0.07] blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] z-0 right-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--color-neon-cyan)] mix-blend-screen opacity-[0.07] blur-[120px] pointer-events-none" />
+      {/* BACKGROUND Blobs */}
+      <div className="absolute top-[-10%] z-0 left-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--color-neon-purple)] mix-blend-screen opacity-[0.05] blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] z-0 right-[-10%] w-[40%] h-[40%] rounded-full bg-[var(--color-neon-cyan)] mix-blend-screen opacity-[0.05] blur-[120px] pointer-events-none" />
       
-      {/* Vercel-style micro-dot grid for depth */}
+      {/* Vercel-style micro-dot grid */}
       <div className="absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:32px_32px] z-0 pointer-events-none" />
 
-      {/* Main Container */}
-      <main className="flex-1 w-full max-w-[1000px] flex flex-col items-center z-10 gap-16 mt-8 sm:mt-16">
+      {/* Main Container with Stagger Animation */}
+      <motion.main 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex-1 w-full max-w-[1000px] flex flex-col items-center z-10 gap-10 mt-4 sm:mt-6"
+      >
         
-        {/* HERO SECTION - Minimal & Elegant */}
-        <section className="text-center space-y-6 flex flex-col items-center w-full">
-          <div className="px-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] backdrop-blur-md flex items-center gap-2 shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+        {/* HERO SECTION */}
+        <motion.section variants={itemVariants} className="text-center space-y-6 flex flex-col items-center w-full">
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            className="px-4 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] backdrop-blur-md flex items-center gap-2 shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
+          >
             <div className="w-1.5 h-1.5 rounded-full bg-white opacity-80 animate-pulse" />
             <span className="text-[10px] sm:text-xs text-gray-400 font-mono tracking-[0.2em] uppercase font-medium">Verified Protocol</span>
-          </div>
+          </motion.div>
           
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/40 leading-[1.1] pb-2 drop-shadow-sm">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/30 leading-[1.1] pb-2 drop-shadow-sm">
             LASTBUYER
           </h1>
           
           <p className="text-gray-400/80 text-sm sm:text-base max-w-lg mt-2 font-medium tracking-wide leading-relaxed">
             Satın al, 3 dakikalık süreyi sıfırla. Süre dolduğunda son alım yapan kişi havuzdaki tüm ödülü alır.
           </p>
-        </section>
+        </motion.section>
 
-        {/* MAIN GAME CARD - "The Titanium Wallet" */}
-        <section className="w-full sm:w-[520px] rounded-3xl p-[1px] bg-gradient-to-b from-white/[0.12] to-white/[0.02] shadow-[0_24px_64px_-12px_rgba(0,0,0,0.8)] transition-all duration-700">
-          <div className="bg-[#080808]/90 backdrop-blur-2xl rounded-[23px] p-8 sm:p-10 flex flex-col items-center gap-10 w-full h-full relative overflow-hidden">
+        {/* MAIN GAME CARD - High End Glassmorphism */}
+        <motion.section 
+          variants={cardVariants} 
+          className="w-full sm:w-[500px] relative z-20 group"
+        >
+          {/* Ambient Glow Behind Card */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-[radial-gradient(circle,rgba(255,255,255,0.03)_0%,transparent_70%)] pointer-events-none opacity-50 transition-opacity duration-1000 group-hover:opacity-100" />
+          
+          <div className="rounded-[2.5rem] bg-white/[0.015] border border-white/[0.05] shadow-[0_8px_32px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[40px] p-8 sm:p-10 flex flex-col items-center gap-8 w-full relative overflow-hidden transition-all duration-700 hover:border-white/[0.08] hover:bg-white/[0.025]">
             
-            {/* Subtle inner top highlight */}
-            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            {/* Elegant Inner Top Highlight */}
+            <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-white/[0.15] to-transparent opacity-50" />
 
             {isActive ? (
               <>
-                {/* Prize Pool Display */}
-                <div className="w-full flex justify-between items-center bg-white/[0.03] border border-white/[0.08] rounded-2xl px-6 py-5 shadow-inner">
-                  <span className="text-gray-400 text-xs uppercase tracking-[0.2em] font-medium flex items-center gap-2">
-                    <Trophy size={14} className="text-gray-500" /> Ödül Havuzu
+                {/* Ultra-Minimal Prize Pool */}
+                <motion.div variants={itemVariants} className="flex flex-col items-center gap-1.5 mt-2">
+                  <span className="text-gray-500 text-[9px] uppercase tracking-[0.4em] font-semibold flex items-center gap-2">
+                    <Trophy size={10} className="text-gray-400" />
+                    Ödül Havuzu
                   </span>
-                  <div className="text-3xl sm:text-4xl font-semibold text-white tracking-tight flex items-baseline gap-1.5 drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                  <div className="text-5xl font-extralight text-white tracking-widest flex items-baseline gap-2.5 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
                     {prizePool.toFixed(2)}
-                    <span className="text-base sm:text-lg text-gray-500 font-medium pt-1">SOL</span>
+                    <span className="text-xl text-gray-500 font-medium">SOL</span>
                   </div>
-                </div>
+                </motion.div>
 
-                {/* Divider */}
-                <div className="w-full h-px bg-gradient-to-r from-transparent via-white/[0.08] to-transparent" />
+                {/* Micro Divider */}
+                <div className="w-12 h-[1px] bg-white/[0.06] rounded-full my-1" />
 
-                {/* High-End Precision Timer */}
-                <div className={`w-full flex justify-center py-4 ${isLowTime ? 'animate-pulse' : ''}`}>
-                  <div className={`font-mono text-6xl sm:text-7xl font-light tracking-tight tabular-nums ${isLowTime ? 'text-red-400 drop-shadow-[0_0_15px_rgba(248,113,113,0.3)]' : 'text-gray-200'}`}>
-                    {formatTime(timeLeft)}
+                {/* PREMIUM CLOCK TIMER - Floating UI */}
+                <motion.div variants={itemVariants} className="w-full flex justify-center">
+                  <div className="flex items-center justify-center gap-4 sm:gap-6">
+                    
+                    {/* MINUTES */}
+                    <div className="flex flex-col items-center">
+                      <div className={`relative w-28 h-28 sm:w-32 sm:h-32 rounded-[2rem] flex items-center justify-center
+                          ${isLowTime 
+                            ? 'bg-red-500/[0.02] border border-red-500/20 shadow-[inset_0_0_30px_rgba(248,113,113,0.05)]' 
+                            : 'bg-white/[0.01] border border-white/[0.03] shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]'
+                          } transition-all duration-700
+                        `}>
+                        <span className={`font-mono text-[80px] sm:text-[96px] leading-none font-extralight tracking-tighter tabular-nums
+                          ${isLowTime ? 'text-red-400 drop-shadow-[0_0_20px_rgba(248,113,113,0.3)]' : 'text-white/90 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]'}
+                        `}>
+                          {minutesStr}
+                        </span>
+                      </div>
+                      <span className={`text-[9px] uppercase tracking-[0.5em] mt-5 font-semibold ${isLowTime ? 'text-red-500/60' : 'text-gray-500'}`}>
+                        Dakika
+                      </span>
+                    </div>
+                    
+                    {/* COLON */}
+                    <span className={`text-5xl sm:text-6xl font-light mb-10 ${isLowTime ? 'text-red-500/40 animate-pulse' : 'text-gray-600/30'}`}>:</span>
+                    
+                    {/* SECONDS */}
+                    <div className="flex flex-col items-center">
+                      <div className={`relative w-28 h-28 sm:w-32 sm:h-32 rounded-[2rem] flex items-center justify-center overflow-hidden
+                          ${isLowTime 
+                            ? 'bg-red-500/[0.02] border border-red-500/20 shadow-[inset_0_0_30px_rgba(248,113,113,0.05)]' 
+                            : 'bg-white/[0.01] border border-white/[0.03] shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]'
+                          } transition-all duration-700
+                        `}>
+                        <AnimatePresence mode="popLayout">
+                          <motion.span
+                            key={secondsStr}
+                            initial={{ y: 30, opacity: 0, scale: 0.9 }}
+                            animate={{ y: 0, opacity: 1, scale: 1 }}
+                            exit={{ y: -30, opacity: 0, scale: 0.9 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                            className={`font-mono text-[80px] sm:text-[96px] leading-none font-extralight tracking-tighter tabular-nums
+                              ${isLowTime ? 'text-red-400 drop-shadow-[0_0_20px_rgba(248,113,113,0.3)]' : 'text-white/90 drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]'}
+                            `}
+                          >
+                            {secondsStr}
+                          </motion.span>
+                        </AnimatePresence>
+                      </div>
+                      <span className={`text-[9px] uppercase tracking-[0.5em] mt-5 font-semibold ${isLowTime ? 'text-red-500/60' : 'text-gray-500'}`}>
+                        Saniye
+                      </span>
+                    </div>
+
                   </div>
-                </div>
+                </motion.div>
 
-                {/* Current King Tag */}
-                <div className="w-full flex-col flex items-center gap-3">
-                  <span className="text-gray-500 text-[10px] uppercase tracking-[0.3em] font-medium flex items-center gap-2">
-                    <Crown size={12} className="text-gray-400" />
-                    Aktif Kral
+                {/* Floating King Pill */}
+                <motion.div variants={itemVariants} className="mt-3 flex items-center gap-4 px-5 py-3 rounded-full bg-white/[0.015] border border-white/[0.04] shadow-[inset_0_0_10px_rgba(255,255,255,0.01)] transition-colors hover:bg-white/[0.03]">
+                  <span className="flex items-center gap-1.5 text-gray-400/80 text-[9px] uppercase tracking-[0.3em] font-semibold">
+                    <Crown size={10} className="text-gray-400/80" />
+                    Kral
                   </span>
-                  <div className="px-5 py-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02] w-full flex justify-center shadow-inner">
-                    <span className="font-mono text-sm tracking-widest text-gray-300 truncate">{currentKing}</span>
-                  </div>
-                </div>
+                  <div className="w-[1px] h-3 bg-white/[0.1] rounded-full" />
+                  <span className="font-mono text-sm tracking-widest text-gray-200 drop-shadow-sm">{currentKing}</span>
+                </motion.div>
               </>
             ) : (
-              <div className="w-full py-8 flex flex-col items-center gap-8 relative">
-                <div className="flex flex-col items-center space-y-2">
-                  <div className="text-red-400/80 text-[10px] uppercase tracking-[0.4em] font-bold animate-pulse">Oyun Tamamlandı</div>
-                  <div className="text-4xl sm:text-5xl font-medium tracking-tighter text-white">
-                    GAME OVER
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, ease: premiumEase }}
+                className="w-full py-8 flex flex-col items-center gap-8 relative"
+              >
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="text-red-400/60 text-[9px] uppercase tracking-[0.5em] font-bold animate-pulse">Protokol Tamamlandı</div>
+                  <div className="text-6xl sm:text-7xl font-extralight tracking-tighter text-white/90 drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                    ENDED
                   </div>
                 </div>
                 
-                <div className="w-full flex flex-col items-center gap-4 bg-white/[0.02] p-6 rounded-2xl border border-white/[0.05]">
-                  <span className="text-gray-500 text-[10px] uppercase tracking-[0.3em] font-medium">KAZANAN CÜZDAN</span>
-                  <div className="font-mono text-base tracking-widest text-white truncate w-full text-center">
+                <div className="flex flex-col items-center gap-3">
+                  <span className="text-gray-500 text-[10px] uppercase tracking-[0.4em] font-medium">Kazanan Cüzdan</span>
+                  <div className="font-mono text-xl tracking-widest text-white/90 mt-2">
                     {currentKing}
                   </div>
-                  <div className="text-gray-400 mt-2 text-sm flex items-center gap-2">
-                    <Trophy size={14} className="text-gray-500" /> +{prizePool.toFixed(2)} SOL
+                  <div className="px-5 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/10 text-emerald-400/80 mt-3 text-sm flex items-center gap-2 font-medium">
+                    <Trophy size={14} /> +{prizePool.toFixed(2)} SOL
                   </div>
                 </div>
 
-                <div className="text-gray-500 text-[10px] font-medium tracking-[0.3em] uppercase mt-4">
-                  Yeni Sezon Bekleniyor
+                <div className="text-gray-600/60 text-[9px] font-semibold tracking-[0.4em] uppercase mt-4">
+                  Yeni Sezon Hazırlanıyor
                 </div>
-              </div>
+              </motion.div>
             )}
 
-            {/* Smart Contract CA */}
-            <div className="w-full mt-2 pt-6 border-t border-white/[0.06] flex items-center justify-between group">
-              <span className="text-gray-600 text-[10px] sm:text-xs uppercase tracking-[0.25em] font-medium whitespace-nowrap hidden sm:block">CA</span>
-              <div className="flex items-center gap-3 w-full sm:w-auto overflow-hidden">
-                <code className="text-gray-400 text-[10px] sm:text-xs font-mono tracking-widest break-all truncate">
+            {/* Smart Contract CA - Minimal Footer */}
+            <motion.div variants={itemVariants} className="w-full mt-4 flex items-center justify-between group px-2 max-w-[85%]">
+              <span className="text-gray-600/60 text-[9px] uppercase tracking-[0.4em] font-semibold whitespace-nowrap">Kontrat</span>
+              <div className="flex items-center gap-3">
+                <code className="text-gray-400/60 text-[10px] sm:text-xs font-mono tracking-widest group-hover:text-gray-300 transition-colors duration-300">
                   {contractAddress}
                 </code>
-                <button 
+                <motion.button 
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={handleCopy} 
-                  className="text-gray-500 hover:text-white transition-colors cursor-pointer rounded-md p-1 hover:bg-white/5"
+                  className="text-gray-500/40 hover:text-white/80 transition-colors cursor-pointer"
                   aria-label="Copy CA"
                 >
-                  {copied ? <Check size={14} className="text-green-400" /> : <Copy size={14} />}
-                </button>
+                  {copied ? <Check size={14} className="text-green-400/80" /> : <Copy size={13} />}
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
 
           </div>
-        </section>
+        </motion.section>
 
         {/* Info Grid - Linear App Style */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full px-2 mt-4">
-          <div className="p-6 rounded-2xl border border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.03] transition-colors flex flex-col gap-4">
-            <div className="w-8 h-8 rounded-full border border-white/[0.1] flex items-center justify-center bg-black">
-              <Coins size={14} className="text-gray-300" />
+        <motion.section variants={containerVariants} className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full px-2 mt-4">
+          <motion.div variants={itemVariants} className="p-8 rounded-[24px] border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.03] transition-colors flex flex-col gap-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] group hover:-translate-y-1 duration-300">
+            <div className="w-10 h-10 rounded-full border border-white/[0.1] flex items-center justify-center bg-black/50 group-hover:scale-110 transition-transform duration-500">
+              <Coins size={16} className="text-gray-300" />
             </div>
             <h4 className="text-gray-200 font-medium text-sm">Gerçek SOL Ödülü</h4>
             <p className="text-gray-500 text-xs leading-relaxed">Pump.fun yaratıcı ücretleri bu kasada otomatik olarak SOL cinsinden birikir.</p>
-          </div>
-          <div className="p-6 rounded-2xl border border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.03] transition-colors flex flex-col gap-4">
-            <div className="w-8 h-8 rounded-full border border-white/[0.1] flex items-center justify-center bg-black">
-              <Timer size={14} className="text-gray-300" />
+          </motion.div>
+          <motion.div variants={itemVariants} className="p-8 rounded-[24px] border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.03] transition-colors flex flex-col gap-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] group hover:-translate-y-1 duration-300">
+            <div className="w-10 h-10 rounded-full border border-white/[0.1] flex items-center justify-center bg-black/50 group-hover:scale-110 transition-transform duration-500">
+              <Timer size={16} className="text-gray-300" />
             </div>
             <h4 className="text-gray-200 font-medium text-sm">Adil Sistem</h4>
             <p className="text-gray-500 text-xs leading-relaxed">0.5+ SOL alım yaptığınız an Kral olur ve sayacı 3 dakikaya eşitlersiniz.</p>
-          </div>
-          <div className="p-6 rounded-2xl border border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.03] transition-colors flex flex-col gap-4">
-            <div className="w-8 h-8 rounded-full border border-white/[0.1] flex items-center justify-center bg-black">
-              <Trophy size={14} className="text-gray-300" />
+          </motion.div>
+          <motion.div variants={itemVariants} className="p-8 rounded-[24px] border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.03] transition-colors flex flex-col gap-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] group hover:-translate-y-1 duration-300">
+            <div className="w-10 h-10 rounded-full border border-white/[0.1] flex items-center justify-center bg-black/50 group-hover:scale-110 transition-transform duration-500">
+              <Trophy size={16} className="text-gray-300" />
             </div>
             <h4 className="text-gray-200 font-medium text-sm">Efsanevi Kazanç</h4>
-            <p className="text-gray-500 text-xs leading-relaxed">Süre sona erdiğinde havuzdaki bütün SOL doğrudan son Kral'a aktarılır.</p>
-          </div>
-        </section>
+            <p className="text-gray-500 text-xs leading-relaxed">Süre sona erdiğinde havuzdaki bütün SOL doğrudan son Kral&apos;a aktarılır.</p>
+          </motion.div>
+        </motion.section>
 
         {/* Minimalist CTA */}
         {isActive && (
-          <a 
+          <motion.a 
+            variants={itemVariants}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             href={`https://pump.fun/coin/${contractAddress}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mt-4 mb-20 px-8 py-3.5 rounded-full bg-white text-black font-medium text-sm sm:text-base flex items-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition-all shadow-[0_0_30px_rgba(255,255,255,0.15)] no-underline cursor-pointer"
+            className="group mt-6 mb-24 px-10 py-4 rounded-full bg-white text-black font-semibold text-sm sm:text-base flex items-center gap-3 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] no-underline cursor-pointer hover:shadow-[0_0_60px_rgba(255,255,255,0.3)]"
           >
-            Pump.fun'da Satın Al
+            Pump.fun&apos;da Satın Al
             <ExternalLink size={16} className="text-gray-500 group-hover:text-black transition-colors" />
-          </a>
+          </motion.a>
         )}
 
-      </main>
+      </motion.main>
       
       {/* Minimal Footer */}
-      <footer className="w-full text-center p-6 text-gray-600 text-[10px] uppercase tracking-[0.3em] font-medium mt-auto border-t border-white/[0.03]">
+      <motion.footer 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="w-full text-center p-8 text-gray-600 text-[10px] uppercase tracking-[0.4em] font-medium mt-auto border-t border-white/[0.03]"
+      >
         LASTBUYER &copy; {new Date().getFullYear()}
-      </footer>
+      </motion.footer>
     </div>
   );
 }
+
