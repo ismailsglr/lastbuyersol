@@ -11,7 +11,7 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // Easing for premium feel
-const premiumEase = [0.16, 1, 0.3, 1];
+const premiumEase = [0.16, 1, 0.3, 1] as const;
 
 const containerVariants = {
   hidden: { opacity: 0 },
