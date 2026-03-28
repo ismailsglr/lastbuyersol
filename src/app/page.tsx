@@ -47,7 +47,7 @@ const cardVariants = {
 
 export default function Home() {
   const [copied, setCopied] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(168); // Defaults to 02:48
+  const [timeLeft, setTimeLeft] = useState(60); // Defaults to 01:00
   const [timerEndsAt, setTimerEndsAt] = useState<number | null>(null);
   const [contractAddress, setContractAddress] = useState("PumpFunContract1234567890abcdef");
   const [prizePool, setPrizePool] = useState(12.45);
@@ -182,7 +182,7 @@ export default function Home() {
           </h1>
           
           <p className="text-gray-400/80 text-sm sm:text-base max-w-lg mt-2 font-medium tracking-wide leading-relaxed">
-            Satın al, 3 dakikalık süreyi sıfırla. Süre dolduğunda son alım yapan kişi havuzdaki tüm ödülü alır.
+            Buy to reset the 1-minute timer. When the time is up, the last buyer takes the entire reward pool.
           </p>
         </motion.section>
 
@@ -205,7 +205,7 @@ export default function Home() {
                 <motion.div variants={itemVariants} className="flex flex-col items-center gap-1.5 mt-2">
                   <span className="text-gray-500 text-[9px] uppercase tracking-[0.4em] font-semibold flex items-center gap-2">
                     <Trophy size={10} className="text-gray-400" />
-                    Ödül Havuzu
+                    Prize Pool
                   </span>
                   <div className="text-5xl font-extralight text-white tracking-widest flex items-baseline gap-2.5 drop-shadow-[0_0_20px_rgba(255,255,255,0.15)]">
                     {prizePool.toFixed(2)}
@@ -235,7 +235,7 @@ export default function Home() {
                         </span>
                       </div>
                       <span className={`text-[9px] uppercase tracking-[0.5em] mt-5 font-semibold ${isLowTime ? 'text-red-500/60' : 'text-gray-500'}`}>
-                        Dakika
+                        Minutes
                       </span>
                     </div>
                     
@@ -266,7 +266,7 @@ export default function Home() {
                         </AnimatePresence>
                       </div>
                       <span className={`text-[9px] uppercase tracking-[0.5em] mt-5 font-semibold ${isLowTime ? 'text-red-500/60' : 'text-gray-500'}`}>
-                        Saniye
+                        Seconds
                       </span>
                     </div>
 
@@ -277,7 +277,7 @@ export default function Home() {
                 <motion.div variants={itemVariants} className="mt-3 flex items-center gap-4 px-5 py-3 rounded-full bg-white/[0.015] border border-white/[0.04] shadow-[inset_0_0_10px_rgba(255,255,255,0.01)] transition-colors hover:bg-white/[0.03]">
                   <span className="flex items-center gap-1.5 text-gray-400/80 text-[9px] uppercase tracking-[0.3em] font-semibold">
                     <Crown size={10} className="text-gray-400/80" />
-                    Kral
+                    King
                   </span>
                   <div className="w-[1px] h-3 bg-white/[0.1] rounded-full" />
                   <span className="font-mono text-sm tracking-widest text-gray-200 drop-shadow-sm">{currentKing}</span>
@@ -291,14 +291,14 @@ export default function Home() {
                 className="w-full py-8 flex flex-col items-center gap-8 relative"
               >
                 <div className="flex flex-col items-center space-y-4">
-                  <div className="text-red-400/60 text-[9px] uppercase tracking-[0.5em] font-bold animate-pulse">Protokol Tamamlandı</div>
+                  <div className="text-red-400/60 text-[9px] uppercase tracking-[0.5em] font-bold animate-pulse">Protocol Ended</div>
                   <div className="text-6xl sm:text-7xl font-extralight tracking-tighter text-white/90 drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
                     ENDED
                   </div>
                 </div>
                 
                 <div className="flex flex-col items-center gap-3">
-                  <span className="text-gray-500 text-[10px] uppercase tracking-[0.4em] font-medium">Kazanan Cüzdan</span>
+                  <span className="text-gray-500 text-[10px] uppercase tracking-[0.4em] font-medium">Winning Wallet</span>
                   <div className="font-mono text-xl tracking-widest text-white/90 mt-2">
                     {currentKing}
                   </div>
@@ -308,14 +308,14 @@ export default function Home() {
                 </div>
 
                 <div className="text-gray-600/60 text-[9px] font-semibold tracking-[0.4em] uppercase mt-4">
-                  Yeni Sezon Hazırlanıyor
+                  Preparing New Season
                 </div>
               </motion.div>
             )}
 
             {/* Smart Contract CA - Minimal Footer */}
             <motion.div variants={itemVariants} className="w-full mt-4 flex items-center justify-between group px-2 max-w-[85%]">
-              <span className="text-gray-600/60 text-[9px] uppercase tracking-[0.4em] font-semibold whitespace-nowrap">Kontrat</span>
+              <span className="text-gray-600/60 text-[9px] uppercase tracking-[0.4em] font-semibold whitespace-nowrap">Contract</span>
               <div className="flex items-center gap-3">
                 <code className="text-gray-400/60 text-[10px] sm:text-xs font-mono tracking-widest group-hover:text-gray-300 transition-colors duration-300">
                   {contractAddress}
@@ -341,22 +341,22 @@ export default function Home() {
             <div className="w-10 h-10 rounded-full border border-white/[0.1] flex items-center justify-center bg-black/50 group-hover:scale-110 transition-transform duration-500">
               <Coins size={16} className="text-gray-300" />
             </div>
-            <h4 className="text-gray-200 font-medium text-sm">Gerçek SOL Ödülü</h4>
-            <p className="text-gray-500 text-xs leading-relaxed">Pump.fun yaratıcı ücretleri bu kasada otomatik olarak SOL cinsinden birikir.</p>
+            <h4 className="text-gray-200 font-medium text-sm">Real SOL Reward</h4>
+            <p className="text-gray-500 text-xs leading-relaxed">Pump.fun creator fees are automatically accumulated in this vault in SOL.</p>
           </motion.div>
           <motion.div variants={itemVariants} className="p-8 rounded-[24px] border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.03] transition-colors flex flex-col gap-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] group hover:-translate-y-1 duration-300">
             <div className="w-10 h-10 rounded-full border border-white/[0.1] flex items-center justify-center bg-black/50 group-hover:scale-110 transition-transform duration-500">
               <Timer size={16} className="text-gray-300" />
             </div>
-            <h4 className="text-gray-200 font-medium text-sm">Adil Sistem</h4>
-            <p className="text-gray-500 text-xs leading-relaxed">0.5+ SOL alım yaptığınız an Kral olur ve sayacı 3 dakikaya eşitlersiniz.</p>
+            <h4 className="text-gray-200 font-medium text-sm">Fair System</h4>
+            <p className="text-gray-500 text-xs leading-relaxed">The moment you buy 0.5+ SOL you become the King and reset the timer to 1 minute.</p>
           </motion.div>
           <motion.div variants={itemVariants} className="p-8 rounded-[24px] border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.03] transition-colors flex flex-col gap-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.02)] group hover:-translate-y-1 duration-300">
             <div className="w-10 h-10 rounded-full border border-white/[0.1] flex items-center justify-center bg-black/50 group-hover:scale-110 transition-transform duration-500">
               <Trophy size={16} className="text-gray-300" />
             </div>
-            <h4 className="text-gray-200 font-medium text-sm">Efsanevi Kazanç</h4>
-            <p className="text-gray-500 text-xs leading-relaxed">Süre sona erdiğinde havuzdaki bütün SOL doğrudan son Kral&apos;a aktarılır.</p>
+            <h4 className="text-gray-200 font-medium text-sm">Legendary Earnings</h4>
+            <p className="text-gray-500 text-xs leading-relaxed">When the time is up, all the SOL in the pool is directly transferred to the last King.</p>
           </motion.div>
         </motion.section>
 
@@ -371,7 +371,7 @@ export default function Home() {
             rel="noopener noreferrer"
             className="group mt-6 mb-24 px-10 py-4 rounded-full bg-white text-black font-semibold text-sm sm:text-base flex items-center gap-3 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] no-underline cursor-pointer hover:shadow-[0_0_60px_rgba(255,255,255,0.3)]"
           >
-            Pump.fun&apos;da Satın Al
+            Buy on Pump.fun
             <ExternalLink size={16} className="text-gray-500 group-hover:text-black transition-colors" />
           </motion.a>
         )}
