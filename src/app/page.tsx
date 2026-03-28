@@ -275,40 +275,76 @@ export default function Home() {
 
                 {/* Floating King Pill */}
                 <motion.div variants={itemVariants} className="mt-3 flex items-center gap-4 px-5 py-3 rounded-full bg-white/[0.015] border border-white/[0.04] shadow-[inset_0_0_10px_rgba(255,255,255,0.01)] transition-colors hover:bg-white/[0.03]">
-                  <span className="flex items-center gap-1.5 text-gray-400/80 text-[9px] uppercase tracking-[0.3em] font-semibold">
+                  <span className="flex items-center gap-1.5 text-gray-400/80 text-[9px] uppercase tracking-[0.3em] font-semibold shrink-0">
                     <Crown size={10} className="text-gray-400/80" />
                     King
                   </span>
-                  <div className="w-[1px] h-3 bg-white/[0.1] rounded-full" />
-                  <span className="font-mono text-sm tracking-widest text-gray-200 drop-shadow-sm">{currentKing}</span>
+                  <div className="w-[1px] h-3 bg-white/[0.1] rounded-full shrink-0" />
+                  <span className="font-mono text-sm tracking-widest text-gray-200 drop-shadow-sm truncate" title={currentKing}>
+                    {currentKing.length > 15 ? currentKing.slice(0, 6) + "..." + currentKing.slice(-4) : currentKing}
+                  </span>
                 </motion.div>
               </>
             ) : (
               <motion.div 
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, ease: premiumEase }}
-                className="w-full py-8 flex flex-col items-center gap-8 relative"
+                initial={{ opacity: 0, filter: "blur(10px)", scale: 0.95 }}
+                animate={{ opacity: 1, filter: "blur(0px)", scale: 1 }}
+                exit={{ opacity: 0, filter: "blur(10px)", scale: 0.95 }}
+                transition={{ duration: 1.5, ease: premiumEase }}
+                className="w-full py-2 flex flex-col items-center gap-5 relative"
               >
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="text-red-400/60 text-[9px] uppercase tracking-[0.5em] font-bold animate-pulse">Protocol Ended</div>
-                  <div className="text-6xl sm:text-7xl font-extralight tracking-tighter text-white/90 drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                    ENDED
+                {/* Background Ambient for Victory */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.03)_0%,transparent_100%)] pointer-events-none rounded-[2.5rem]" />
+
+                {/* 1. Victory Header */}
+                <div className="flex flex-col items-center space-y-4 relative z-10 w-full mt-2">
+                  <div className="flex items-center gap-3 px-5 py-2 rounded-full border border-red-500/20 bg-red-500/[0.04] shadow-[0_0_30px_rgba(225,29,72,0.15)]">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse drop-shadow-[0_0_10px_rgba(239,68,68,1)]" />
+                    <div className="text-red-400/90 text-[11px] sm:text-[12px] uppercase tracking-[0.4em] font-bold">
+                      Round Ended
+                    </div>
                   </div>
                 </div>
                 
-                <div className="flex flex-col items-center gap-3">
-                  <span className="text-gray-500 text-[10px] uppercase tracking-[0.4em] font-medium">Winning Wallet</span>
-                  <div className="font-mono text-xl tracking-widest text-white/90 mt-2">
-                    {currentKing}
+                {/* 2. The King's Showcase */}
+                <div className="flex flex-col items-center w-full relative z-10">
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-gradient-to-tr from-yellow-500/0 via-yellow-400/20 to-yellow-500/0 rounded-full blur-[25px] animate-pulse" />
+                    <Crown size={54} className="text-[#FFD700] drop-shadow-[0_0_40px_rgba(255,215,0,0.6)] relative z-10" strokeWidth={1} />
                   </div>
-                  <div className="px-5 py-2 rounded-full bg-emerald-500/[0.04] border border-emerald-500/10 text-emerald-400/80 mt-3 text-sm flex items-center gap-2 font-medium">
-                    <Trophy size={14} /> +{prizePool.toFixed(2)} SOL
+                  <div className="text-yellow-500/80 text-[11px] uppercase tracking-[0.4em] font-bold mt-3 flex items-center gap-2">
+                    <span className="text-[14px]">👑</span> Winning King
+                  </div>
+                  
+                  {/* VIP Podium */}
+                  <motion.div 
+                    whileHover={{ scale: 1.02 }}
+                    className="relative px-6 py-3 sm:px-10 sm:py-4 rounded-2xl bg-gradient-to-b from-white/[0.04] to-transparent border-t border-white/[0.15] border-b border-white/[0.02] border-x border-white/[0.06] shadow-[0_15px_35px_-10px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-md mt-3"
+                  >
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06)_0%,transparent_100%)] rounded-2xl pointer-events-none" />
+                    <div className="font-mono text-xl sm:text-2xl font-light tracking-[0.15em] text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.4)] relative z-10" title={currentKing}>
+                      {currentKing.length > 15 ? currentKing.slice(0, 6) + "..." + currentKing.slice(-4) : currentKing}
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* 3. The Prize */}
+                <div className="flex flex-col items-center mt-2 w-full relative z-10">
+                  <div className="text-amber-500/60 text-[11px] uppercase tracking-[0.4em] font-bold mb-2">
+                    Prize Won
+                  </div>
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-r from-amber-500/0 via-amber-400/10 to-amber-500/0 blur-2xl animate-pulse" />
+                    <div className="text-5xl sm:text-7xl font-extralight tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-[#FFF8D6] via-[#FFD700] to-[#B8860B] drop-shadow-[0_10px_20px_rgba(218,165,32,0.3)]">
+                      {prizePool.toFixed(2)} <span className="text-2xl sm:text-3xl font-light text-amber-500/60 tracking-normal">SOL</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="text-gray-600/60 text-[9px] font-semibold tracking-[0.4em] uppercase mt-4">
-                  Preparing New Season
+                {/* 4. Waiting State */}
+                <div className="text-gray-500/60 text-[10px] sm:text-[11px] font-mono tracking-[0.2em] font-medium uppercase mt-5 mb-2 flex items-center gap-2 animate-pulse whitespace-nowrap">
+                  <span className="text-[14px] opacity-70 origin-center animate-[spin_4s_linear_infinite]">⏳</span>
+                  Waiting for a new round...
                 </div>
               </motion.div>
             )}
@@ -317,7 +353,7 @@ export default function Home() {
             <motion.div variants={itemVariants} className="w-full mt-4 flex items-center justify-between group px-2 max-w-[85%]">
               <span className="text-gray-600/60 text-[9px] uppercase tracking-[0.4em] font-semibold whitespace-nowrap">Contract</span>
               <div className="flex items-center gap-3">
-                <code className="text-gray-400/60 text-[10px] sm:text-xs font-mono tracking-widest group-hover:text-gray-300 transition-colors duration-300">
+                <code className="text-gray-400/60 text-[10px] sm:text-xs font-mono tracking-widest group-hover:text-gray-300 transition-colors duration-300 truncate max-w-[150px] sm:max-w-none" title={contractAddress}>
                   {contractAddress}
                 </code>
                 <motion.button 
