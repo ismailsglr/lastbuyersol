@@ -350,17 +350,17 @@ export default function Home() {
             )}
 
             {/* Smart Contract CA - Minimal Footer */}
-            <motion.div variants={itemVariants} className="w-full mt-4 flex items-center justify-between group px-2 max-w-[85%]">
-              <span className="text-gray-600/60 text-[9px] uppercase tracking-[0.4em] font-semibold whitespace-nowrap">Contract</span>
-              <div className="flex items-center gap-3">
-                <code className="text-gray-400/60 text-[10px] sm:text-xs font-mono tracking-widest group-hover:text-gray-300 transition-colors duration-300 truncate max-w-[150px] sm:max-w-none" title={contractAddress}>
+            <motion.div variants={itemVariants} className="w-full mt-4 flex items-center justify-between group px-2 gap-3 max-w-full sm:max-w-[90%]">
+              <span className="text-gray-600/60 text-[9px] uppercase tracking-[0.4em] font-semibold whitespace-nowrap shrink-0">Contract</span>
+              <div className="flex items-center gap-3 min-w-0 flex-1 justify-end">
+                <code className="text-gray-400/70 text-[10px] sm:text-xs font-mono tracking-wider group-hover:text-gray-300 transition-colors duration-300 truncate" title={contractAddress}>
                   {contractAddress}
                 </code>
                 <motion.button 
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleCopy} 
-                  className="text-gray-500/40 hover:text-white/80 transition-colors cursor-pointer"
+                  className="text-gray-500/40 hover:text-white/80 transition-colors cursor-pointer shrink-0"
                   aria-label="Copy CA"
                 >
                   {copied ? <Check size={14} className="text-green-400/80" /> : <Copy size={13} />}
